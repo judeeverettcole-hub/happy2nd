@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Letter For You</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', serif;
+}
+
+body {
+    background: radial-gradient(circle, #3d1217 10%, #2b090d 90%);
+    color: #fce4ec;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* FALLING HEARTS */
+.falling-heart {
+    position: fixed;
+    top: -20px;
+    width: 14px;
+    height: 14px;
+    background: rgba(248,187,208,.45);
+    transform: rotate(45deg);
+    animation: fall linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.falling-heart::before,
+.falling-heart::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: rgba(248,187,208,.45);
+    border-radius: 50%;
+}
+
+.falling-heart::before { top: -7px; left: 0; }
+.falling-heart::after { top: 0; left: -7px; }
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(45deg); opacity: 0; }
+}
+
+/* COVER */
+#cover {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg,#3a0f14,#1a0406);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    cursor: pointer;
+    text-align: center;
+    padding: 20px;
+}
+
+.envelope-box h1 {
+    font-size: 2.2rem; /* Dibuat lebih besar */
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+    color: #f8bbd0;
+    font-style: italic;
+}
+
+.envelope-container {
+    width: 340px; /* Dibuat lebih besar */
+    max-width: 90vw;
+    height: 220px;
+    background: #7a1c24;
+    border-radius: 12px;
+    margin: auto;
+    box-shadow: 0 15px 35px #0009;
+    border: 2px solid #f8bbd04d;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.envelope-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.envelope-box:hover .envelope-container img {
+    transform: scale(1.06);
+}
+
+.open-btn-text {
+    margin-top: 25px;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    border: 1px solid #f8bbd066;
+    padding: 12px 28px;
+    border-radius: 25px;
+    display: inline-block;
+    background: #0005;
+    color: #f8bbd0;
+}
+
+/* MAIN CONTENT - Dibuat lebih lebar & besar */
+#main-content {
+    display: none;
+    max-width: 850px; /* Diperbesar dari 650px jadi 850px */
+    width: 92%;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1.8s, transform 1.8s;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.letter-card {
+    background: rgba(45,10,14,.88);
+    border: 1px solid #f8bbd04d;
+    border-radius: 20px;
+    padding: 55px 40px; /* Padding diperbesar */
+    margin-bottom: 60px;
+    box-shadow: 0 20px 40px #0009;
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: visible;
+}
+
+/* DEKORASI FLOATING 3D */
+.floating-3d {
+    position: absolute;
+    width: 110px; /* Diperbesar sedikit */
+    height: 110px;
+    z-index: 10;
+    object-fit: contain;
+    animation: float3D 3.5s ease-in-out infinite alternate;
+}
+
+.deco-left { left: 5px; top: -35px; }
+.deco-right { right: 5px; top: -35px; animation-delay: 1.7s; }
+
+.deco-bottom-left { left: 5px; bottom: -35px; animation-delay: 1s; }
+.deco-bottom-right { right: 5px; bottom: -35px; animation-delay: 2.2s; }
+
+@keyframes float3D {
+    0% { transform: translateY(0) rotate(0); }
+    50% { transform: translateY(-8px) rotate(6deg) scale(1.05); }
+    100% { transform: translateY(0) rotate(-3deg); }
+}
+
+.stamp {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: 2px dashed #f8bbd0;
+    padding: 8px 14px;
+    font-size: .8rem;
+    background: #8b00004d;
+    border-radius: 4px;
+    color: #f8bbd0;
+    transform: rotate(5deg);
+}
+
+h2 {
+    color: #f8bbd0;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+    font-size: 1.8rem; /* Diperbesar */
+}
+
+.divider {
+    margin: 15px 0 25px;
+    color: #f8bbd0;
+    font-size: 1.2rem;
+    opacity: .7;
+    letter-spacing: 3px;
+}
+
+p {
+    line-height: 2;
+    font-size: 1.05rem; /* Ukuran teks diperbesar */
+    margin-bottom: 22px;
+    color: #fce4ec;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* LANDSCAPE PHOTO */
+.gallery-box {
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.pure-landscape-img {
+    width: 100%;
+    height: 480px; /* Diperbesar dari 380px */
+    object-fit: cover;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px #0009;
+    display: block;
+}
+
+.plain-gallery-text {
+    margin-top: 20px;
+    font-size: 1.25rem;
+    color: #f8bbd0;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* SPOTIFY & VINYL MUSIC PLAYER */
+.spotify-section-wrapper {
+    position: relative;
+    margin: 40px 0 60px;
+    text-align: center;
+}
+
+.music-title-hint {
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+    color: #fce4ec;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.player-outer-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px; /* Diperbesar */
+    margin: 0 auto;
+}
+
+.vinyl-record {
+    position: absolute;
+    right: 5px;
+    width: 160px; /* Diperbesar */
+    height: 160px;
+    background: radial-gradient(circle, #111 20%, #222 21%, #000 35%, #151515 50%, #000 70%);
+    border-radius: 50%;
+    border: 2px solid #333;
+    box-shadow: -5px 10px 25px rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    transition: transform 0.5s ease;
+}
+
+.vinyl-label {
+    width: 60px;
+    height: 60px;
+    background: #8b1e2b;
+    border-radius: 50%;
+    border: 2px solid #f8bbd0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vinyl-label::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: #111;
+    border-radius: 50%;
+}
+
+.vinyl-star-deco {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 1.5rem;
+    color: #f8bbd0;
+    text-shadow: 0 0 5px #000;
+}
+
+.vinyl-record.spinning {
+    animation: rotateVinyl 4s linear infinite;
+}
+
+@keyframes rotateVinyl {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spotify-card {
+    position: relative;
+    z-index: 2;
+    background: #5d2217;
+    border: 2px solid #e0a38b;
+    border-radius: 18px;
+    padding: 18px 24px;
+    width: 88%;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+    text-align: left;
+}
+
+.ribbon-deco {
+    position: absolute;
+    top: -22px;
+    left: -18px;
+    width: 60px;
+    height: 60px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.album-cover-box {
+    position: relative;
+    width: 85px; /* Diperbesar */
+    height: 85px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.album-cover-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.spotify-content {
+    flex-grow: 1;
+    min-width: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.spotify-top-icon {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2px;
+}
+
+.spotify-logo {
+    width: 20px;
+    height: 20px;
+    fill: #fce4ec;
+    opacity: 0.9;
+}
+
+.song-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+}
+
+.song-artist {
+    font-size: 0.82rem;
+    color: #e0a38b;
+    margin-bottom: 8px;
+}
+
+.spotify-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.spotify-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.spotify-play-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: none;
+    color: #5d2217;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+
+.spotify-play-btn:hover {
+    transform: scale(1.08);
+}
+
+.spotify-play-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: #5d2217;
+}
+
+/* LOVE LETTER STYLING */
+.letter-layout {
+    text-align: left;
+    position: relative;
+}
+
+.single-polaroid-side {
+    float: left;
+    width: 200px; /* Diperbesar dari 140px */
+    max-width: 45%;
+    margin: 10px 25px 15px 0;
+    position: relative;
+}
+
+.single-polaroid-frame {
+    background: transparent;
+    padding: 0;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transform: rotate(-3deg);
+    overflow: hidden;
+}
+
+.single-polaroid-frame img {
+    width: 100%;
+    height: 290px; /* Diperbesar dari 220px */
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
+}
+
+.letter-flower-deco {
+    position: absolute;
+    top: -18px;
+    left: -18px;
+    width: 50px;
+    height: 50px;
+    z-index: 5;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* REASONS WHY YOU SPECIAL STYLING */
+.reasons-container-style {
+    position: relative;
+    padding: 20px 0;
+}
+
+.reasons-header-title {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #f8bbd0;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.reasons-flex-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: relative;
+}
+
+.reasons-side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    flex: 1;
+}
+
+.reason-bubble {
+    background: rgba(255, 240, 243, 0.92);
+    color: #4a101b;
+    padding: 14px 18px;
+    border-radius: 20px;
+    font-size: 0.95rem; /* Ukuran teks bubble diperbesar */
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    line-height: 1.4;
+    border: 1px solid #f8bbd0;
+}
+
+.reasons-center-bouquet {
+    flex: 0 0 160px; /* Ukuran buket diperbesar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reasons-center-bouquet img {
+    width: 150px;
+    height: 190px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+}
+
+/* YES / NO QUESTION SLIDE */
+.question-card {
+    background: rgba(45,10,14,.92);
+    border: 1px solid #f8bbd066;
+    border-radius: 20px;
+    padding: 50px 30px;
+    margin-bottom: 60px;
+    box-shadow: 0 20px 40px #0008;
+    text-align: center;
+    position: relative;
+    overflow: visible;
+}
+
+.question-heart {
+    font-size: 65px;
+    margin-bottom: 20px;
+    animation: float3D 2.5s ease-in-out infinite alternate;
+}
+
+.answer-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 35px;
+}
+
+.answer-btn {
+    border: none;
+    padding: 15px 36px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .25s;
+}
+
+.answer-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+}
+
+.yes-btn {
+    background: #f8bbd0;
+    color: #4a101b;
+}
+
+.no-btn {
+    background: #54151e;
+    color: #fce4ec;
+    border: 1px solid #f8bbd0;
+}
+
+#answer-message {
+    margin-top: 25px;
+    color: #f8bbd0;
+    font-size: 1.1rem;
+    white-space: pre-line;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+    #main-content { padding: 30px 10px; width: 95%; }
+    .letter-card { padding: 35px 20px; }
+    .pure-landscape-img { height: 280px; }
+    
+    .spotify-card { width: 92%; padding: 12px 14px; }
+    .vinyl-record { width: 120px; height: 120px; right: -5px; }
+    .album-cover-box { width: 65px; height: 65px; }
+    .song-title { font-size: 0.88rem; }
+    .song-artist { font-size: 0.72rem; }
+
+    .single-polaroid-side { width: 140px; margin-right: 15px; }
+    .single-polaroid-frame img { height: 200px; }
+
+    .reasons-flex-wrapper {
+        flex-direction: column;
+    }
+    .reasons-center-bouquet {
+        order: -1;
+        margin-bottom: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUDIO -->
+<audio id="bg-music" src="lsong.mpeg" loop></audio>
+
+<!-- COVER -->
+<div id="cover" onclick="openLetter()">
+    <div class="envelope-box">
+        <h1>A Special Letter Just For You</h1>
+        <div class="envelope-container">
+            <img src="lat.png" alt="Map Cover" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400';">
+        </div>
+        <div class="open-btn-text">Klik di sini untuk membuka</div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+
+    <!-- 1. LANDSCAPE PHOTO -->
+    <div class="gallery-box reveal">
+        <img
+            class="pure-landscape-img"
+            src="first.jpeg"
+            alt="Our special photo"
+            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800';">
+
+        <p class="plain-gallery-text">
+            To: Edgarth
+        </p>
+    </div>
+
+    <!-- 2. MUSIC PLAYER (SPOTIFY & VINYL) -->
+    <div class="spotify-section-wrapper reveal">
+        <div class="music-title-hint">Play the music first ♡</div>
+        
+        <div class="player-outer-container">
+            <div class="vinyl-record" id="vinyl-record">
+                <div class="vinyl-label"></div>
+                <div class="vinyl-star-deco">★</div>
+            </div>
+
+            <div class="spotify-card">
+                <svg class="ribbon-deco" viewBox="0 0 100 100">
+                    <path d="M 20,50 Q 0,20 30,10 Q 50,30 20,50 Z" fill="#b32438"/>
+                    <path d="M 50,20 Q 80,0 70,30 Q 50,30 50,20 Z" fill="#b32438"/>
+                    <circle cx="38" cy="25" r="8" fill="#881525"/>
+                    <path d="M 35,30 C 20,60 10,70 5,85" stroke="#b32438" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <path d="M 40,30 C 45,60 55,75 60,88" stroke="#b32438" stroke-width="6" fill="none" stroke-linecap="round"/>
+                </svg>
+
+                <div class="album-cover-box">
+                    <img src="song.jpeg" alt="Album Cover">
+                </div>
+
+                <div class="spotify-content">
+                    <div class="spotify-top-icon">
+                        <svg class="spotify-logo" viewBox="0 0 24 24">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141 C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.18-.1.2-.78-.36-.6-.18-.42-.78.18-.96 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                        </svg>
+                    </div>
+                    <div class="song-title">P.S. I LOVE YOU</div>
+                    <div class="song-artist">Paul Partohap</div>
+                    <a href="https://open.spotify.com/track/1w3azB0VuRFp79AduIwrIy?si=owBEReABRp2LicQ4zWOyKg" class="spotify-action-btn" target="_blank">
+                        <span>+</span> Save on Spotify
+                    </a>
+                </div>
+
+                <div class="spotify-controls">
+                    <button class="spotify-play-btn" id="play-btn" onclick="toggleMusic()" aria-label="Play/Pause">
+                        <svg id="play-icon" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. LOVE LETTER -->
+    <div class="letter-card reveal">
+        <img class="floating-3d deco-left" src="lope.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+        <img class="floating-3d deco-bottom-left" src="memori.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+
+        <div class="stamp">LOVE<br>19k</div>
+
+        <h2 style="text-align:center;">LOVE LETTER</h2>
+        <div class="divider" style="text-align:center;">--- * ---</div>
+
+        <div class="letter-layout">
+            <p>happy 2nd mensiversary, sayang. </p>
+
+            <div class="single-polaroid-side">
+                <img class="letter-flower-deco" src="bunga.png" Flower Deco" style="border-radius:50%;">
+                
+                <div class="single-polaroid-frame">
+                    <img src="polaroid.png" alt="Foto Polaroid" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300';">
+                </div>
+            </div>
+
+            <p>
+                aku mencintai kamu, menyayangi kamu dengan sepenuh hati yang aku punya. i want to keep walking through life with you, facing everything together, creating beautiful moments, and making memories that we can look back on with a smile. 
+            </p>
+
+            <p>
+                sayang, i love you, i love you, i love you. more than words could ever explain. aku bersyukur, saaaangat bersyukur karena semesta mempertemukan aku sama kamu. out of all the possibilities in this world, i’m so happy that i got to meet you, love you, and share my days with you.
+            </p>
+
+            <p>
+               terima kasih sudah hadir di hidup aku, thank you for being a part of my days, dan terima kasih karena sampai hari ini kita masih sama-sama memilih untuk bertahan dan melangkah bersama. i know our journey is still long. masih banyak hal yang belum kita lewati, banyak cerita yang belum kita tulis, dan banyak kenangan yang masih menunggu untuk kita ciptakan.
+            </p>
+
+            <p>
+                aku nggak berharap hubungan kita selalu sempurna, sayang. i only hope that we’ll always have reasons to understand each other, forgive each other, and hold on to one another when things get hard. kalau nanti ada perbedaan, semoga kita bisa belajar untuk mengerti satu sama lain. kalau nanti ada masalah, semoga kita nggak lupa bahwa we are two people fighting for the same love, not two people who have to fight against each other.
+            </p>
+
+            <p> 
+                i want to grow with you, learn with you, and discover more sides of you as time goes by. aku mau menjadi tempat kamu bercerita, tempat kamu pulang ketika lelah, dan seseorang yang selalu berusaha membuat kamu merasa dicintai. i want you to know that your presence means so much to me, more than i could ever put into words.
+            </p>
+
+            <p>
+                happy second mensiversary, cintaku. two months may still feel short compared to the long journey i want to take with you, but every moment we’ve shared means so much to me. i will always cherish every laugh, every story, every little conversation, and even the simplest moments, because they are all part of our story.
+            </p>
+
+            <p>
+                i love you, sayang. today, tomorrow, and hopefully on many more days to come. aku mau terus memilih kamu, terus belajar mencintai kamu dengan cara yang kamu butuhkan, dan terus membangun hubungan ini bersama-sama. may we always have hearts that are willing to fight for us, hands that are willing to hold on, and the same goal of continuing to walk side by side.
+            </p>
+
+            <p>
+                here's to us, to our little love story, and to all the beautiful memories we're going to make together. aku sayang kamu, more than i could ever explain. always you, my love.
+            </p>
+
+            <div class="clearfix"></div>
+
+            <p style="text-align:right;margin-top:20px;font-style:italic;">
+                With Love,<br><b>Evgen</b>
+            </p>
+        </div>
+    </div>
+
+    <!-- 4. REASONS WHY YOU SPECIAL -->
+    <div class="letter-card reveal">
+        <img class="floating-3d deco-left"  src="2026.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+        <img class="floating-3d deco-right" src="flower.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+
+        <h2 class="reasons-header-title">REASON WHY YOU SPECIAL</h2>
+        
+        <div class="reasons-container-style">
+            <div class="reasons-flex-wrapper">
+                <div class="reasons-side-column">
+                    <div class="reason-bubble">
+                        Kamu selalu tahu cara bikin aku tersenyum.
+                    </div>
+                    <div class="reason-bubble">
+                        Cara kamu perhatian, even in little things.
+                    </div>
+                    <div class="reason-bubble">
+                        Kamu selalu jadi tempat yang nyaman buat aku.
+                    </div>
+                </div>
+
+                <div class="reasons-center-bouquet">
+                    <img src="aitang.jpeg" alt="Red Roses Bouquet"  onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300';">
+                </div>
+
+                <div class="reasons-side-column">
+                    <div class="reason-bubble">
+                        Senang rasanya bisa cerita apa aja sama kamu.
+                    </div>
+                    <div class="reason-bubble">
+                        Kamu selalu bikin aku nyaman.
+                    </div>
+                    <div class="reason-bubble">
+                        Dan yang paling spesial, karena kamu adalah kamu.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p style="margin-top:35px;font-size:1rem;opacity:.8;text-align:center;">
+            Sampai di sini dulu ya sayang surat kecilnya.<br>
+            But wait... there's one more thing! 
+        </p>
+    </div>
+
+    <!-- 5. YES / NO SLIDE -->
+    <div class="question-card reveal">
+        <img class="floating-3d deco-left" src="talk.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+      
+        <img class="floating-3d deco-bottom-right" src="bintang.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+
+        <div class="question-heart">💌</div>
+
+        <h2>Can I Ask You Something? </h2>
+
+        <div class="divider">--- ♥ ---</div>
+
+        <p>
+            Sebelum surat kecil ini berakhir, ada satu pertanyaan yang ingin aku tanyakan ke kamu.
+        </p>
+
+        <p style="font-size:1.2rem;color:#f8bbd0;">
+            <b>do you want to keep creating beautiful memories with me?
+        </p>
+
+        <div class="answer-buttons">
+            <button class="answer-btn yes-btn" onclick="answerYes()">
+                YES 
+            </button>
+
+            <button class="answer-btn no-btn" onclick="answerNo()">
+                NO
+            </button>
+        </div>
+
+        <p id="answer-message" aria-live="polite"></p>
+    </div>
+
+    <!-- 6. PENUTUP -->
+    <div class="letter-card reveal">
+        <img class="floating-3d deco-left" src=";i;y.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+
+        <img class="floating-3d deco-bottom-right" src="bintang.png" alt="Decoration" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2904/2904973.png';">
+
+        <div style="font-size:55px;margin-bottom:20px;"></div>
+
+        <h2>THE END ♡</h2>
+
+        <div class="divider">--- ♥ ---</div>
+
+        <p>
+            Thank you for reading my little letter until the end. Semoga hari-harimu selalu dipenuhi hal-hal baik, senyum, dan kebahagiaan. 
+        </p>
+
+        <p style="color:#f8bbd0;font-style:italic;font-size:1.1rem;">
+            With love, always ♡
+        </p>
+    </div>
+
+</div>
+
+<script>
+const music = document.getElementById('bg-music');
+const playIcon = document.getElementById('play-icon');
+const vinylRecord = document.getElementById('vinyl-record');
+let heartsStarted = false;
+
+function toggleMusic() {
+    if (music.paused) {
+        music.play().then(() => {
+            playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+            vinylRecord.classList.add('spinning');
+        }).catch(() => {
+            alert('Musik tidak bisa diputar. Periksa file lsong.mpeg ya!');
+        });
+    } else {
+        music.pause();
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        vinylRecord.classList.remove('spinning');
+    }
+}
+
+/* FUNGSI MEMBUKA COVER */
+function openLetter() {
+    const cover = document.getElementById('cover');
+    const mainContent = document.getElementById('main-content');
+
+    // Tampilkan konten utama terlebih dahulu
+    mainContent.style.display = 'block';
+    
+    // Beri efek transisi menghilang
+    cover.style.opacity = '0';
+    cover.style.pointerEvents = 'none';
+
+    setTimeout(() => {
+        cover.style.display = 'none';
+        window.scrollTo(0, 0);
+
+        startFallingHearts();
+        triggerObserver();
+    }, 800);
+}
+
+/* SCROLL REVEAL */
+function triggerObserver() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+/* FALLING HEARTS */
+function startFallingHearts() {
+    if (heartsStarted) return;
+    heartsStarted = true;
+
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('falling-heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        heart.style.opacity = Math.random() * 0.5 + 0.3;
+        heart.style.transform =
+            `scale(${Math.random() * 0.6 + 0.7}) rotate(45deg)`;
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 7000);
+    }, 300);
+}
+
+/* YES: OPEN WHATSAPP */
+function answerYes() {
+    const nomor =  "628892266204"
+    const pesan = "Haiii Aku udah baca surat kamu sampai akhir. " +
+        "Jawabanku YES! " +
+        "(buat kata-kata balasan)";
+
+    const link = "https://wa.me/628892266204"
+        "?text=" + encodeURIComponent(pesan);
+
+    window.open(link, "_blank");
+}
+
+/* NO: SHOW MESSAGE */
+function answerNo() {
+    document.getElementById('answer-message').textContent =
+        "mana boleh jawab no?"
+}
+</script>
+
+</body>
+</html>
